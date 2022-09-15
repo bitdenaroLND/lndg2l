@@ -1,0 +1,20 @@
+{
+  "name": "lndg2l",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "a terminal lndg database explorer",
+  "bin": {
+    "lndg2l": "node ./index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "bitdenaro",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.0.2",
+    "inquirer": "^9.1.1",
+    "sqlite3": "^5.0.11",
+    "table": "^6.8.0"
+  }
+}
