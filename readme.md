@@ -1,4 +1,4 @@
-# lndg2
+# lndg2l
 ## a terminal lndg database explorer
 
 
