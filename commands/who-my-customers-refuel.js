@@ -28,13 +28,13 @@ export async function whoMyCustomerRefuel (days) {
     
     
 
-    dataTable.push([source.chan_out, source.rebalance_value.toLocaleString(), roundToNearest(source.rebalance_ppm, 2).toLocaleString(), 'Target', 'Total Sent', 'ppm'])    
+    dataTable.push([source.chan_out.trim(), source.rebalance_value.toLocaleString(), roundToNearest(source.rebalance_ppm, 2).toLocaleString(), 'Target', 'Total Sent', 'ppm'])    
     spanning.push({ col: 0, row: dataTable.length - 1, rowSpan: sourceTargets.length + 1 } )
     spanning.push({ col: 1, row: dataTable.length - 1, rowSpan: sourceTargets.length + 1 } )
     spanning.push({ col: 2, row: dataTable.length - 1, rowSpan: sourceTargets.length + 1 } )
     
     sourceTargets.forEach(target => {
-      dataTable.push(['', '', '', target.alias, target.rebalance_value.toLocaleString(), roundToNearest(target.rebalance_ppm, 2).toLocaleString()])
+      dataTable.push(['', '', '', target.alias.trim(), target.rebalance_value.toLocaleString(), roundToNearest(target.rebalance_ppm, 2).toLocaleString()])
     })
   })
 
