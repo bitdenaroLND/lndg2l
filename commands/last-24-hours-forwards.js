@@ -70,8 +70,6 @@ export async function last24HoursForwards () {
     ['Average in the last 7 days', averageForwardsLastWeek, averageFeeLastWeek, averageFailedLastWeek, averageFailedFeeLastWeek, averageRebalanceLastWeek, averageRebalanceFeeLastWeek]
   ]  
 
-  dataTable.forEach(data => console.log(data.length))
-
   const tableConfig = {
     columns: [
       { alignment: 'center' },
