@@ -74,7 +74,7 @@ const getBestSources = async (days) => {
     gui_channels.chan_id = gui_paymenthops.chan_id
   where
     gui_rebalancer.requested >= datetime('now','-${days} day')
-    and gui_rebalancer.status not in (0, 1)
+    and gui_rebalancer.status = 2
   group by
     gui_channels.alias
   order by    
@@ -107,7 +107,7 @@ const getTargets = async (days) => {
       gui_channels.chan_id = gui_paymenthops.chan_id
     where
       gui_rebalancer.requested >= datetime('now','-${days} day')
-      and gui_rebalancer.status not in (0,1)
+      and gui_rebalancer.status = 2
     group by
       gui_channels.alias,
       target_alias      

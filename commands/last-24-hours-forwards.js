@@ -119,7 +119,7 @@ const getLast24HoursRebalances = async () => {
   from gui_rebalancer
   where
     requested >= datetime('now','-1 day')
-    and status not in (0, 1)  
+    and status = 2 
   `
 
   const dbResult = await dbGetAll(sql)    
@@ -225,6 +225,7 @@ const getTotalRebalance = async (days) => {
   from gui_rebalancer
   where
     requested >= datetime('now','-${days} day')
+    and status = 2
   `
   const dbResult = await dbGetAll(sql) 
 
