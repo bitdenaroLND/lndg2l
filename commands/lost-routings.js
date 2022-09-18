@@ -154,12 +154,16 @@ const getLostReasons = async (hours) => {
       else 'undefined'
     end failure_detail_description,*/
     
-    sum(missed_fee) total
+    sum(missed_fee) total    
   from gui_failedhtlcs
+  inner join gui_channels
+  on
+    gui_channels.chan_id = gui_failedhtlcs.chan_id_out
   where
-    timestamp >= datetime('now','-${hours} hour')  
+    timestamp >= datetime('now','-${hours} hour')
+    and gui_failedhtlcs.amount <= (cast((100 - ar_in_target) as float) / 100) * capacity
   group by    
-    wire_failure
+    wire_failure    
   order by
     total desc;
   `
@@ -183,7 +187,8 @@ const getLoses = async (hours) => {
   on
     gui_channels.chan_id = gui_failedhtlcs.chan_id_out
   where
-    timestamp >= datetime('now','-${hours} hour')    
+    timestamp >= datetime('now','-${hours} hour')   
+    and gui_failedhtlcs.amount <= (cast((100 - ar_in_target) as float) / 100) * capacity 
   group by
     gui_channels.alias,
     wire_failure,
