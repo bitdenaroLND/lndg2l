@@ -11,7 +11,8 @@ import {
   lostRoutings,
   getBigGuys,
   lastChannelForward,
-  whoMyCustomerRefuel
+  whoMyCustomerRefuel,
+  destinationsRefuelledBy
  } from './commands/index.js'
 
 let tables = []
@@ -26,7 +27,8 @@ const choices = [
   {question: 'Customers who spend the most', call: customersWhoSpendTheMost, params: [{answer:'howManyDays', default: process.env.DEFAULT_DAYS}]},
   {question: 'Destinations that generate the most fees', call: destinationGenerateMostFees, params: [{answer:'howManyDays', default: process.env.DEFAULT_DAYS}]},
   {question: 'Want to route large transactions? Look at these guys!', call: getBigGuys, params: [{answer:'howManyDays', default: process.env.DEFAULT_DAYS}, {answer:'minSats', default: process.env.MIN_SATS}]},
-  {question: 'Who my customers refuel', call: whoMyCustomerRefuel, params:[{answer: 'howManyDays', default: process.env.DEFAULT_DAYS}]}
+  {question: 'Who my customers refuel', call: whoMyCustomerRefuel, params:[{answer: 'howManyDays', default: process.env.DEFAULT_DAYS}]},
+  {question: 'Destinations refuelled by', call: destinationsRefuelledBy, params:[{answer: 'howManyDays', default: process.env.DEFAULT_DAYS}]}
 ]    
 
 const defaultMinSats = Number(process.env.MIN_SATS)
