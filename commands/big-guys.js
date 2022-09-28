@@ -17,7 +17,7 @@ export async function getBigGuys (days, minSats) {
 
   bigCustomers.forEach(customer => {
     dataTable.push([
-      customer.alias,
+      customer.alias.replace(/[^\w.\s]/gi, '').trim(),
       customer.total.toLocaleString(),
       '',      
       '',
@@ -29,7 +29,7 @@ export async function getBigGuys (days, minSats) {
 
   bigDestinations.forEach((destination, index) => {
     if (dataTable[index + 2]) {
-      dataTable[index + 2][3] = destination.alias
+      dataTable[index + 2][3] = destination.alias.replace(/[^\w.\s]/gi, '').trim()
       dataTable[index + 2][4] = destination.total.toLocaleString()
       dataTable[index + 2][5] = destination.arUpTo.toLocaleString()
       dataTable[index + 2][6] = destination.local_balance.toLocaleString()
@@ -38,7 +38,7 @@ export async function getBigGuys (days, minSats) {
         '',        
         '',
         '',
-        destination.alias,
+        destination.alias.replace(/[^\w.\s]/gi, '').trim(),
         destination.total.toLocaleString(),
         destination.arUpTo.toLocaleString(),
         destination.local_balance.toLocaleString()
