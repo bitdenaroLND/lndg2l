@@ -244,7 +244,7 @@ const getLastRebalances = async (chanOutAlias) => {
   from gui_rebalancer
   where
     target_alias = '${chanOutAlias}'
-    and status not in (0, 1)
+    and status = 2
   order by
     requested desc
   limit 5

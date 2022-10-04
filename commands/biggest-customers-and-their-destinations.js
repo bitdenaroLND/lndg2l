@@ -68,11 +68,11 @@ export async function biggestCustomerWithDestinations (days, topCustomer, topDes
     spanningRows.push({col: 3, row: dataTable.length, rowSpan: forwardDestinations.length, verticalAlignment: 'middle'})
     
     dataTable.push([
-      forward.alias,
+      forward.alias.replace(/[^\w.\s]/gi, '').trim(),
       roundToNearest(forward.fees, 2).toLocaleString(),
       roundToNearest((forward.fees / totalFees) * 100, 2),
       forward.totalForwards,
-      forwardDestinations[0].alias,
+      forwardDestinations[0].alias.replace(/[^\w.\s]/gi, '').trim(),
       roundToNearest(forwardDestinations[0].fees, 2).toLocaleString(),
       roundToNearest((forwardDestinations[0].fees / forward.fees) * 100, 2),
       forwardDestinations[0].totalForwards
@@ -86,7 +86,7 @@ export async function biggestCustomerWithDestinations (days, topCustomer, topDes
         '',
         '',
         '',
-        destination.alias,
+        destination.alias.replace(/[^\w.\s]/gi, '').trim(),
         roundToNearest(destination.fees, 2).toLocaleString(),
         roundToNearest((destination.fees / forward.fees) * 100, 2),
         destination.totalForwards
