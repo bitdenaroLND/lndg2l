@@ -119,13 +119,9 @@ const getTotalLostFees = async (hours) => {
   const sql = `
   select
     sum(missed_fee) total
-  from gui_failedhtlcs
-  inner join gui_channels
-  on
-    gui_channels.chan_id = gui_failedhtlcs.chan_id_out
+  from gui_failedhtlcs  
   where
       timestamp >= datetime('now','-${hours} hour')
-      and gui_failedhtlcs.amount <= (cast((100 - ar_in_target) as float) / 100) * capacity
   `
 
   const dbResult = await dbGetAll(sql)
@@ -160,12 +156,8 @@ const getLostReasons = async (hours) => {
     
     sum(missed_fee) total    
   from gui_failedhtlcs
-  inner join gui_channels
-  on
-    gui_channels.chan_id = gui_failedhtlcs.chan_id_out
   where
     timestamp >= datetime('now','-${hours} hour')
-    and gui_failedhtlcs.amount <= (cast((100 - ar_in_target) as float) / 100) * capacity
   group by    
     wire_failure    
   order by
@@ -192,7 +184,6 @@ const getLoses = async (hours) => {
     gui_channels.chan_id = gui_failedhtlcs.chan_id_out
   where
     timestamp >= datetime('now','-${hours} hour')   
-    and gui_failedhtlcs.amount <= (cast((100 - ar_in_target) as float) / 100) * capacity 
   group by
     gui_channels.alias,
     wire_failure,
