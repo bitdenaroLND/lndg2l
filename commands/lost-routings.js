@@ -120,6 +120,9 @@ const getTotalLostFees = async (hours) => {
   select
     sum(missed_fee) total
   from gui_failedhtlcs
+  inner join gui_channels
+  on
+    gui_channels.chan_id = gui_failedhtlcs.chan_id_out
   where
       timestamp >= datetime('now','-${hours} hour')
       and gui_failedhtlcs.amount <= (cast((100 - ar_in_target) as float) / 100) * capacity
