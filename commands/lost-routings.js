@@ -122,6 +122,7 @@ const getTotalLostFees = async (hours) => {
   from gui_failedhtlcs
   where
       timestamp >= datetime('now','-${hours} hour')
+      and gui_failedhtlcs.amount <= (cast((100 - ar_in_target) as float) / 100) * capacity
   `
 
   const dbResult = await dbGetAll(sql)
