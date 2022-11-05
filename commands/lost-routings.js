@@ -15,8 +15,6 @@ export async function lostRoutings (hours) {
   if (!totalLostFees) {
     return []
   }
-
-  const GFBPA = 1903
   
   const dataTable = [
     [`Lost Routings with ${hours} hour${hours > 1 ? 's' : ''}`,'','','','','','','','','','','','','']    
@@ -27,72 +25,70 @@ export async function lostRoutings (hours) {
   for (const reason of lostReasons) {
     const losesByReason = loses.filter(lose => lose.wire_failure === reason.wire_failure)
     
-    dataTable.push(['Reason', '% Ratio', 'Demand Rate', 'Channels','','','','','','','','','',''])    
+    dataTable.push(['Reason', '% Ratio', 'Channels','','','','','','','','','','',''])    
     dataTable.push([
       reason.wire_failure_description,      
-      roundToNearest((reason.total / totalLostFees) * 100, 2),
-      (reason.total / GFBPA).toLocaleString(),      
+      roundToNearest((reason.total / totalLostFees) * 100, 2),     
       'Channel',
+      'Fees Lost',
       '% Ratio',
-      'Demand Rate',
+      'Fee Rate',
+      'Total Amount',
       'Max Amount',
       'Avg Amount',
       'Attempts',
       'Last 5 Forwards',
       '',
-      'Last 5 Rebalances',
-      '',
+      'Last 5 Rebalances',      
       ''
     ])
     
     spanning.push({ col: 0, row: dataTable.length - 1, rowSpan: (losesByReason.length * 6 ) + 1, verticalAlignment: 'middle' })    
     spanning.push({ col: 1, row: dataTable.length - 1, rowSpan: (losesByReason.length * 6) + 1, verticalAlignment: 'middle' })    
-    spanning.push({ col: 2, row: dataTable.length - 1, rowSpan: (losesByReason.length * 6) + 1, verticalAlignment: 'middle' })    
-    spanning.push({ col: 3, row: dataTable.length - 2, colSpan: 11, alignment: 'center' })        
-    spanning.push({ col: 9, row: dataTable.length - 1, colSpan: 2, alignment: 'center' })        
-    spanning.push({ col: 11, row: dataTable.length - 1, colSpan: 3, alignment: 'center' })        
+    spanning.push({ col: 2, row: dataTable.length - 2, colSpan: 12, alignment: 'center' })        
+    spanning.push({ col: 10, row: dataTable.length - 1, colSpan: 2, alignment: 'center' })        
+    spanning.push({ col: 12, row: dataTable.length - 1, colSpan: 2, alignment: 'center' })        
     
     for (const lose of losesByReason) {
       dataTable.push([
         '',
         '',
-        '',
         lose.alias.replace(/[^\w.\s]/gi, ''),
-        roundToNearest((lose.totalAmount / reason.total) * 100, 2),
-        (lose.totalAmount / GFBPA).toLocaleString(),
+        lose.totalMissedFee.toLocaleString(),
+        roundToNearest((lose.totalMissedFee / reason.total) * 100, 2),
+        lose.chanelCurrentFee.toLocaleString(),
+        lose.totalAmount.toLocaleString(),
         lose.maxAmount,          
         lose.avgAmount,          
         lose.tentativas
         ,'When'
         ,'ppm'
         ,'When'
-        ,'Status'
         ,'ppm'              
       ])
       
+      spanning.push({ col: 2, row: dataTable.length - 1, rowSpan: 6, verticalAlignment: 'middle' })
       spanning.push({ col: 3, row: dataTable.length - 1, rowSpan: 6, verticalAlignment: 'middle' })
       spanning.push({ col: 4, row: dataTable.length - 1, rowSpan: 6, verticalAlignment: 'middle' })
       spanning.push({ col: 5, row: dataTable.length - 1, rowSpan: 6, verticalAlignment: 'middle' })
       spanning.push({ col: 6, row: dataTable.length - 1, rowSpan: 6, verticalAlignment: 'middle' })
       spanning.push({ col: 7, row: dataTable.length - 1, rowSpan: 6, verticalAlignment: 'middle' })
       spanning.push({ col: 8, row: dataTable.length - 1, rowSpan: 6, verticalAlignment: 'middle' })      
+      spanning.push({ col: 9, row: dataTable.length - 1, rowSpan: 6, verticalAlignment: 'middle' })      
+      
 
       const lastFive = await getLastFive(lose)
 
-      dataTable.push(['','','','','','','','','', lastFive[0].forwardTime, roundToNearest(lastFive[0].forwardAmount, 2).toLocaleString(),lastFive[0].rebalanceTime,lastFive[0].rebalanceStatus,roundToNearest(lastFive[0].rebalancePpm, 2).toLocaleString()])
-      dataTable.push(['','','','','','','','','', lastFive[1].forwardTime, roundToNearest(lastFive[1].forwardAmount, 2).toLocaleString(),lastFive[1].rebalanceTime,lastFive[1].rebalanceStatus,roundToNearest(lastFive[1].rebalancePpm, 2).toLocaleString()])
-      dataTable.push(['','','','','','','','','', lastFive[2].forwardTime, roundToNearest(lastFive[2].forwardAmount, 2).toLocaleString(),lastFive[2].rebalanceTime,lastFive[2].rebalanceStatus,roundToNearest(lastFive[2].rebalancePpm, 2).toLocaleString()])
-      dataTable.push(['','','','','','','','','', lastFive[3].forwardTime, roundToNearest(lastFive[3].forwardAmount, 2).toLocaleString(),lastFive[3].rebalanceTime,lastFive[3].rebalanceStatus,roundToNearest(lastFive[3].rebalancePpm, 2).toLocaleString()])
-      dataTable.push(['','','','','','','','','', lastFive[4].forwardTime, roundToNearest(lastFive[4].forwardAmount, 2).toLocaleString(),lastFive[4].rebalanceTime,lastFive[4].rebalanceStatus,roundToNearest(lastFive[4].rebalancePpm, 2).toLocaleString()])
+      dataTable.push(['','','','','','','','','','', lastFive[0].forwardTime, roundToNearest(lastFive[0].forwardAmount, 2).toLocaleString(),lastFive[0].rebalanceTime, roundToNearest(lastFive[0].rebalancePpm, 2).toLocaleString()])
+      dataTable.push(['','','','','','','','','','', lastFive[1].forwardTime, roundToNearest(lastFive[1].forwardAmount, 2).toLocaleString(),lastFive[1].rebalanceTime, roundToNearest(lastFive[1].rebalancePpm, 2).toLocaleString()])
+      dataTable.push(['','','','','','','','','','', lastFive[2].forwardTime, roundToNearest(lastFive[2].forwardAmount, 2).toLocaleString(),lastFive[2].rebalanceTime, roundToNearest(lastFive[2].rebalancePpm, 2).toLocaleString()])
+      dataTable.push(['','','','','','','','','','', lastFive[3].forwardTime, roundToNearest(lastFive[3].forwardAmount, 2).toLocaleString(),lastFive[3].rebalanceTime, roundToNearest(lastFive[3].rebalancePpm, 2).toLocaleString()])
+      dataTable.push(['','','','','','','','','','', lastFive[4].forwardTime, roundToNearest(lastFive[4].forwardAmount, 2).toLocaleString(),lastFive[4].rebalanceTime, roundToNearest(lastFive[4].rebalancePpm, 2).toLocaleString()])
     }
 
-    dataTable.push(['', '', '', '', '', '', '', '', '', '','','','',''])
+    dataTable.push(['', '', '', '', '', '', '', '','','','','','',''])
     spanning.push({ col: 0, row: dataTable.length - 1, colSpan: 14 })        
-  } 
-  
-  //dataTable.push(['Total Lost', '', (totalLostFees / GFBPA).toLocaleString(), '', '', '', '', '', '', '','','',''])  
-  //spanning.push({ col: 0, row: dataTable.length - 1, colSpan: 2 })          
-  //spanning.push({ col: 3, row: dataTable.length - 1, colSpan: 10 })        
+  }
 
   const tableConfig = {
     columns: [
@@ -120,6 +116,11 @@ const getTotalLostFees = async (hours) => {
   select
     sum(missed_fee) total
   from gui_failedhtlcs  
+  inner join gui_channels
+  on
+    gui_channels.chan_id = gui_failedhtlcs.chan_id_out
+    and gui_channels.is_active = 1
+    and gui_channels.is_open = 1
   where
       timestamp >= datetime('now','-${hours} hour')
   `
@@ -156,6 +157,11 @@ const getLostReasons = async (hours) => {
     
     sum(missed_fee) total    
   from gui_failedhtlcs
+  inner join gui_channels
+  on
+    gui_channels.chan_id = gui_failedhtlcs.chan_id_out
+    and gui_channels.is_active = 1
+    and gui_channels.is_open = 1
   where
     timestamp >= datetime('now','-${hours} hour')
   group by    
@@ -174,23 +180,28 @@ const getLoses = async (hours) => {
     gui_channels.alias,
     chan_id_out,
     wire_failure,
+    gui_channels.local_fee_rate chanelCurrentFee,
+    sum(amount) totalAmount,
     PRINTF("%,d", max(amount)) maxAmount,      
     PRINTF("%,d", avg(amount)) avgAmount,          
-    sum(missed_fee) totalAmount,      
+    sum(missed_fee) totalMissedFee,      
     count(1) tentativas    
   from gui_failedhtlcs
   inner join gui_channels
   on
     gui_channels.chan_id = gui_failedhtlcs.chan_id_out
+    and gui_channels.is_active = 1
+    and gui_channels.is_open = 1
   where
     timestamp >= datetime('now','-${hours} hour')   
   group by
     gui_channels.alias,
     wire_failure,
-    chan_id_out
+    chan_id_out,
+    gui_channels.local_fee_rate
   order by
     wire_failure,
-    totalAmount desc;
+    totalMissedFee desc;
   `
 
   const dbResult = await dbGetAll(sql)
